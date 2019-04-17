@@ -8,7 +8,7 @@ Confluence RCE漏洞检测脚本
 python Confluence_rce_cve-2019-3396.py http://192.168.246.131:8090
 ```
 
-![](https://github.com/mntn0x/CVE-2019-3396/blob/master/%E5%8D%95url.png)
+![](http://bmob-cdn-22571.b0.upaiyun.com/2019/04/17/8b29c7b840bd9d0180cd22357ac3c0e4.png)
 
 【2】批量检测，url格式请看示例
 
@@ -31,7 +31,7 @@ https://wiki.glooko.com
 python Confluence_rce_cve-2019-3396.py -f confluence.txt
 ```
 
-![](https://github.com/mntn0x/CVE-2019-3396/blob/master/%E6%89%B9%E9%87%8F%E6%A3%80%E6%B5%8B.png)
+![](http://bmob-cdn-22571.b0.upaiyun.com/2019/04/17/7e22e7774039cc138062789172fb407f.png)
 
 批量检测，最后会输出有漏洞的域名，并且会将输出默认保存在`confluence_output.txt`文件，也可以通过参数`-o output_file`来指定输出文件位置。
 
@@ -43,4 +43,4 @@ python Confluence_rce_cve-2019-3396.py -f confluence.txt
 python Confluence_rce_cve-2019-3396.py http://192.168.246.131:8090 --command "ls -l"
 ```
 
-![](https://github.com/mntn0x/CVE-2019-3396/blob/master/rce.png)
+![](http://bmob-cdn-22571.b0.upaiyun.com/2019/04/17/c9aac2444020291d803a3973085c69b4.png)
