@@ -48,10 +48,6 @@ target_url = "http://"+url.split("\n")[0] + "/index.php?s="
 
 
 
-如果有自己的服务器，可以在服务器上开启apache服务，放置一个木马文件，修改exp_5，exp_6中的http://www.baidu.com:8000/xxxxx.php为自己的木马文件链接。
-
-
-
 脚本最后会将有洞的url打印出来，如果想写入文件，请在main函数最后添加代码将results字典写入文件即可。
 
 
