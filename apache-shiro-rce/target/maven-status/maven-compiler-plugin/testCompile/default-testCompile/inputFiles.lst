@@ -1,0 +1,13 @@
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/payloads/JRMPReverseConnectSMTest.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/exploit/RMIRegistryExploitTest.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/payloads/TestHarnessTest.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/payloads/PayloadsTest.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/Throwables.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/payloads/JRMPReverseConnectTest.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/WrappedTest.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/payloads/RemoteClassLoadingTest.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/payloads/MyfacesTest.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/CustomPayloadArgs.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/CustomTest.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/CustomDeserializer.java
+/root/mntn/apache-shiro-rce/ysoserial-0.0.5/src/test/java/ysoserial/payloads/FileUploadTest.java
