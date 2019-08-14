@@ -4,3 +4,4 @@
 1. thinkphp v5 RCE漏洞
 2. Confluence RCE漏洞，编号CVE-2019-3396
 3. Weblogic wls async unserialization RCE漏洞，编号CVE-2019-2795
+4. Apache Shiro RCE漏洞
