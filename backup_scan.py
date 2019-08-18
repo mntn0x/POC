@@ -4,25 +4,27 @@ import requests
 import time
 from optparse import OptionParser
 
+# 默认扫描字典和默认header头
 dict = [
-        '/.git/config',
-        '/.svn/entries',
-        '/www.zip',
-        '/www.rar',
-        '/www.7z',
-        '/1.zip',
-        '/phpinfo.php',
-        '/manager/html',
-        '/jmx-console',
-        '/web-console'
-    ]
+    '/.git/config',
+    '/.svn/entries',
+    '/www.zip',
+    '/www.rar',
+    '/www.7z',
+    '/1.zip',
+    '/phpinfo.php',
+    '/manager/html',
+    '/jmx-console',
+    '/web-console'
+]
 header = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
     'Accept-Language': 'zh-CN,zh;q=0.9'
 }
+# 结果列表
 results = []
 
-def backup(host):
+def backup(host, dict=dict, header=header):
     if host[:4] != "http":
         host = "http://"+host
     for item in dict:
@@ -55,11 +57,11 @@ def backup(host):
 如果没有超过，则跳出while循环，继续for循环，开启下一个线程
 如果等于了指定线程数，说明线程已满，进入while循环，轮询判断，直到有线程空出来，就跳出while循环，开启下一个线程
 '''
-def run_thread(file, thread_num):
+def run_thread(file, thread_num, module="backup"):
     thread_list = []
     f_list = open(file, "r")
     for line in f_list.readlines():
-        t = threading.Thread(target=backup, args=(line.strip(),))
+        t = threading.Thread(target=module, args=(line.strip(),))
         thread_list.append(t)
     for i in range(0, len(thread_list)):
         thread_list[i].start()
@@ -97,10 +99,37 @@ def output(file, results):
         f_w.write(i+"\n")
     f_w.close()
 
+# 自定义扫描模块
+def module(host):
+    # 处理url，怎么处理看扫描需求，注意url和字典的拼接
+    if host[:4] != "http":
+        host = "http://"+host
+    url = host
+    # 定义所需字典，可以是读文件，可以是直接写成列表放在函数里
+    dict = [
+    '/test'
+    ]
+    # 定义header头
+    header = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
+    'Accept-Language': 'zh-CN,zh;q=0.9',
+    'Referer': host,
+    'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    # 处理扫描请求和结果
+    for item in dict:
+        try:
+            resp = requests.get(url, headers=header, timeout=3)
+        except Exception as e:
+            raise
+        else:
+            pass
+        finally:
+            pass
 
 if __name__ == '__main__':
     usage = r'''
-       _                      _                              ____
+      _                      _                              ____
      | |__     __ _    ___  | | __  _   _   _ __           / ___|    ___    __ _   _ __
      | '_ \   / _` |  / __| | |/ / | | | | | '_ \   _____  \___ \   / __|  / _` | | '_ \
      | |_) | | (_| | | (__  |   <  | |_| | | |_) | |_____|  ___) | | (__  | (_| | | | | |
@@ -111,12 +140,14 @@ if __name__ == '__main__':
      -L URL List File --list=domains.txt
      -t ThreadsCount
      -o Output File
+     --module Custom module, need to modufy the code
     '''
     parser = OptionParser(usage)  # 带参的话会把参数变量的内容作为帮助信息输出
     parser.add_option('-u', '--url', dest='target_Url', type='string', help='single url')
     parser.add_option('-L', '--list', dest='Url_List', type='string', help='url list file')
     parser.add_option('-t', dest='thread', type='int', default=5, help='thread number')
     parser.add_option('-o', dest='outfile', type='string', default='results.txt', help='output file')
+    parser.add_option('--module', dest='module', action='store_true', help='custom module')
     (options, args) = parser.parse_args()
 
     # 给输入参数赋值
@@ -124,21 +155,31 @@ if __name__ == '__main__':
     uList = options.Url_List
     thread = options.thread
     outFile = options.outfile
+    module = options.module
 
-    if uList != None:
-        run_thread(uList, thread)
-        # 判断线程全部执行完再执行写入文件
-        while True:
-            if len(threading.enumerate()) == 1:
-                output(outFile, results)
-                break
-            else:
-                print("\033[35m[INFO]还有%d个线程未结束...\033[0m" % (len(threading.enumerate())-1))
-                time.sleep(3)
+    if !module:
+        if uList != None:
+            run_thread(uList, thread)
+            # 判断线程全部执行完再执行写入文件，记得线程数减去主线程
+            while True:
+                if len(threading.enumerate()) == 1:
+                    output(outFile, results)
+                    break
+                else:
+                    print("\033[35m[INFO]还有%d个线程未结束...\033[0m" % (len(threading.enumerate())-1))
+                    time.sleep(3)
 
-    if host != None:
-        backup(host)
-        output(outFile, results)
+        if host != None:
+            backup(host)
+            # 就这么几个备份文件，终端输出不多，不必写到文件里去了
+            # output(outFile, results)
+    elif module:
+        if uList != None:
+            run_thread("module")
+        if host != None:
+            module(host)
+            if output != None:
+                output(output, results)
     else:
         print(usage)
-# 指定字典，直接把备份文件变成路径扫描
+# 可扩充的module函数，其中可指定扫描的各种参数(URL、header、线程)，用于以后能快速的启动多线程扫描任务，只需专注于http包的构造即可
