@@ -3,6 +3,7 @@ import threading
 import requests
 import time
 from optparse import OptionParser
+requests.packages.urllib3.disable_warnings()
 
 # 默认扫描字典和默认header头
 dict = [
@@ -30,7 +31,7 @@ def backup(host, dict=dict, header=header):
     for item in dict:
         url = host+item
         try:
-            response = requests.get(url, headers=header, timeout=3)
+            response = requests.get(url, headers=header, verify=False, timeout=3)
             # 先划分最简单的404，然后细分
             if response.status_code != 404:
                 # 返回200，并且返回url和请求url一致，同时返回值不为空，这种情况最有可能是真正的备份文件泄露，以绿色输出
@@ -48,8 +49,12 @@ def backup(host, dict=dict, header=header):
                         results.append("[%d] %s" % (response.status_code, url))
             else:
                 print("[404] %s" % url)
+        except requests.exceptions.ConnectTimeout:
+            print("[Timeout] " + url)
+        except requests.exceptions.ConnectionError:
+            print("[Error] "  + url)
         except:
-            print("\033[31m[Warning] can't connect to %s\033[0m" % url)
+            print("\033[31m[Warning] don't known why connect false... %s\033[0m" % url)
 
 '''
 先将所有url读出来放入列表，为每个url添加线程
@@ -57,7 +62,7 @@ def backup(host, dict=dict, header=header):
 如果没有超过，则跳出while循环，继续for循环，开启下一个线程
 如果等于了指定线程数，说明线程已满，进入while循环，轮询判断，直到有线程空出来，就跳出while循环，开启下一个线程
 '''
-def run_thread(file, thread_num, module="backup"):
+def run_thread(file, thread_num, module=backup):
     thread_list = []
     f_list = open(file, "r")
     for line in f_list.readlines():
@@ -68,6 +73,10 @@ def run_thread(file, thread_num, module="backup"):
         while True:
             if len(threading.enumerate()) <= thread_num:
                 break
+    # 判断最后启动的n个线程是否结束，没结束的话，加上join，确保所有子线程结束之后再进入主线程的写文件操作
+    for j in range(len(thread_list)-thread_num, len(thread_list)):
+        if thread_list[j].isAlive():
+            thread_list[j].join()
 
 def output(file, results):
     print("\033[35m[INFO]扫描完成，写入结果中...\033[0m")
@@ -100,7 +109,7 @@ def output(file, results):
     f_w.close()
 
 # 自定义扫描模块
-def module(host):
+def modulescan(host):
     # 处理url，怎么处理看扫描需求，注意url和字典的拼接
     if host[:4] != "http":
         host = "http://"+host
@@ -119,7 +128,7 @@ def module(host):
     # 处理扫描请求和结果
     for item in dict:
         try:
-            resp = requests.get(url, headers=header, timeout=3)
+            resp = requests.get(url, headers=header, verify=False, timeout=3)
         except Exception as e:
             raise
         else:
@@ -147,7 +156,7 @@ if __name__ == '__main__':
     parser.add_option('-L', '--list', dest='Url_List', type='string', help='url list file')
     parser.add_option('-t', dest='thread', type='int', default=5, help='thread number')
     parser.add_option('-o', dest='outfile', type='string', default='results.txt', help='output file')
-    parser.add_option('--module', dest='module', action='store_true', help='custom module')
+    parser.add_option('--module', dest='module', type='string', default='False',help='custom module')
     (options, args) = parser.parse_args()
 
     # 给输入参数赋值
@@ -157,7 +166,7 @@ if __name__ == '__main__':
     outFile = options.outfile
     module = options.module
 
-    if !module:
+    if module=='False':
         if uList != None:
             run_thread(uList, thread)
             # 判断线程全部执行完再执行写入文件，记得线程数减去主线程
@@ -173,9 +182,9 @@ if __name__ == '__main__':
             backup(host)
             # 就这么几个备份文件，终端输出不多，不必写到文件里去了
             # output(outFile, results)
-    elif module:
+    elif module=='True':
         if uList != None:
-            run_thread("module")
+            run_thread(uList, thread, modulescan)
         if host != None:
             module(host)
             if output != None:
