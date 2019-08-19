@@ -31,7 +31,8 @@ def backup(host, dict=dict, header=header):
     for item in dict:
         url = host+item
         try:
-            response = requests.get(url, headers=header, verify=False, timeout=3)
+            # 不校验https证书
+            response = requests.get(url, headers=header, verify=False, timeout=5)
             # 先划分最简单的404，然后细分
             if response.status_code != 404:
                 # 返回200，并且返回url和请求url一致，同时返回值不为空，这种情况最有可能是真正的备份文件泄露，以绿色输出
@@ -53,8 +54,24 @@ def backup(host, dict=dict, header=header):
             print("[Timeout] " + url)
         except requests.exceptions.ConnectionError:
             print("[Error] "  + url)
+        # 重定向次数过多，忽略该错误
+        except requests.exceptions.TooManyRedirects:
+            pass
         except:
-            print("\033[31m[Warning] don't known why connect false... %s\033[0m" % url)
+            retry = requests.get(url, headers=header, verify=False, timeout=5)
+            if retry.status_code != 404:
+                if retry.status_code==200 and url==retry.url and retry.text!="":
+                    print("\033[32m[Retry-200] %s\033[0m" % url)
+                    results.append("[200] "+url)
+                elif retry.status_code!=200:
+                    if url!=retry.url:
+                        print("\033[36m[Retry-%d] %s\033[0m  ->  %s" % (retry.status_code, url, retry.url))
+                        results.append("[Retry-%d] %s  ->  %s" % (retry.status_code, url, retry.url))
+                    else:
+                        print("\033[36m[Retry-%d] %s\033[0m" % (retry.status_code, url))
+                        results.append("[Retry-%d] %s" % (retry.status_code, url))
+            else:
+                print("[Retry-404] %s" % url)
 
 '''
 先将所有url读出来放入列表，为每个url添加线程
