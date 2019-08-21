@@ -9,6 +9,10 @@ requests.packages.urllib3.disable_warnings()
 dict = [
     '/.git/config',
     '/.svn/entries',
+    '/.hg',
+    '/.bzr',
+    '/.DS_Store',
+    '/CVS/Entries',
     '/www.zip',
     '/www.rar',
     '/www.7z',
@@ -16,7 +20,12 @@ dict = [
     '/phpinfo.php',
     '/manager/html',
     '/jmx-console',
-    '/web-console'
+    '/web-console',
+    '/WEB-INF/database.properties',
+    '/WEB-INF/web.xml',
+    '/WEB-INF/src/'
+    # '/WEB-INF/lib/'
+    # '/WEB-INF/classes/'
 ]
 header = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
