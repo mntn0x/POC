@@ -13,6 +13,7 @@ dict = [
     '/.bzr',
     '/.DS_Store',
     '/CVS/Entries',
+    '/install.php'
     '/www.zip',
     '/www.rar',
     '/www.7z',
@@ -34,14 +35,16 @@ header = {
 # 结果列表
 results = []
 
-def backup(host, dict=dict, header=header):
+def backup(host, dict=dict, header=header, timeout=5):
     if host[:4] != "http":
         host = "http://"+host
+    if host[-1] == "/":
+        host = host[:-1]
     for item in dict:
         url = host+item
         try:
             # 不校验https证书
-            response = requests.get(url, headers=header, verify=False, timeout=5)
+            response = requests.get(url, headers=header, verify=False, timeout=timeout)
             # 先划分最简单的404，然后细分
             if response.status_code != 404:
                 # 返回200，并且返回url和请求url一致，同时返回值不为空，这种情况最有可能是真正的备份文件泄露，以绿色输出
@@ -63,11 +66,11 @@ def backup(host, dict=dict, header=header):
             print("[Timeout] " + url)
         except requests.exceptions.ConnectionError:
             print("[Error] "  + url)
-        # 重定向次数过多，忽略该错误
+        # 重定向次数过多，忽略该错误，直接进入下一次循环
         except requests.exceptions.TooManyRedirects:
-            pass
+            continue
         except:
-            retry = requests.get(url, headers=header, verify=False, timeout=5)
+            retry = requests.get(url, headers=header, verify=False, timeout=timeout)
             if retry.status_code != 404:
                 if retry.status_code==200 and url==retry.url and retry.text!="":
                     print("\033[32m[Retry-200] %s\033[0m" % url)
@@ -182,6 +185,7 @@ if __name__ == '__main__':
     parser.add_option('-L', '--list', dest='Url_List', type='string', help='url list file')
     parser.add_option('-t', dest='thread', type='int', default=5, help='thread number')
     parser.add_option('-o', dest='outfile', type='string', default='results.txt', help='output file')
+    parser.add_option('--timeout', dest='timeout', type=int, default=5, help='timeout count')
     parser.add_option('--module', dest='module', type='string', default='False',help='custom module')
     (options, args) = parser.parse_args()
 
@@ -190,6 +194,7 @@ if __name__ == '__main__':
     uList = options.Url_List
     thread = options.thread
     outFile = options.outfile
+    timeout = options.timeout
     module = options.module
 
     if module=='False':
