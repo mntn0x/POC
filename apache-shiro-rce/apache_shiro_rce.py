@@ -7,7 +7,7 @@ import requests
 import sys
 from Crypto.Cipher import AES
 
-JAR_FILE = 'target/ysoserial-0.0.5-all.jar'
+JAR_FILE = 'ysoserial-0.0.5-all.jar'
 
 
 def poc(url, command):
