@@ -67,10 +67,10 @@ F_id=(select(version())))#
 
 The last closed SQL statement is as follows：
 
-![](https://s2.ax1x.com/2019/10/10/uTrYTg.png)
+![](S-CMS-sql.png)
 
 Of course, because it is REQUEST, there is no problem with GET (remember code#)：
 
-![](https://s2.ax1x.com/2019/10/10/uTrNkQ.png)
+![](S-CMS-sql_1.png)
 
-![](https://s2.ax1x.com/2019/10/10/uTrUYj.png)
+![](S-CMS-sql_2.png)
