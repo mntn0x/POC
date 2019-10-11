@@ -6,7 +6,7 @@
 ​    Software link： https://cdn.shanling.top/file/4.edu.php.zip
 ​    Version: v 1.0
 
-## 二、漏洞概述
+## Details
 
 Error is in file: 4.edu.php\conn\function.php
 
@@ -67,10 +67,10 @@ F_id=(select(version())))#
 
 The last closed SQL statement is as follows：
 
-![](D:\Picture\S-CMS-sql.png)
+![](https://s2.ax1x.com/2019/10/10/uTrYTg.png)
 
 Of course, because it is REQUEST, there is no problem with GET (remember code#)：
 
-![](D:\Picture\S-CMS-sql_1.png)
+![](https://s2.ax1x.com/2019/10/10/uTrNkQ.png)
 
-![](D:\Picture\S-CMS-sql_2.png)
+![](https://s2.ax1x.com/2019/10/10/uTrUYj.png)
