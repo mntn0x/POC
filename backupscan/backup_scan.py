@@ -3,7 +3,7 @@
 import threading
 import requests
 import time
-import re
+from bs4 import BeautifulSoup
 from optparse import OptionParser
 from page_404 import page_404
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -36,7 +36,8 @@ dict = [
 ]
 header = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
-    'Accept-Language': 'zh-CN,zh;q=0.9'
+    'Accept-Language': 'zh-CN,zh;q=0.9',
+    'Connection': 'close'
 }
 # 结果列表
 results = []
@@ -54,30 +55,34 @@ def backup(host, dict=dict, header=header, timeout=5):
         try:
             flag, response = check_404.is_404(url)
             if not flag:
-                # 返回200，并且返回url和请求url一致，同时返回值不为空，这种情况最有可能是真正的备份文件泄露，以绿色输出
-                if response.status_code==200 and url==response.url and response.text!="":
+                # 返回为False, None，说明是page404中request报错，在page404中已输出报错原因，此处不再处理
+                if response == None:
+                    continue
+                # 返回200，并且返回url和请求url一致，同时返回值不为空(在page404中已判断)，这种情况最有可能是真正的备份文件泄露，以绿色输出
+                if response.status_code == 200 and url == response.url:
                     print("\033[32m[200] %s\033[0m" % url)
                     # 因为最后要将结果写入文件，以返回码开头，在写入文件前先使用sort排序，返回码可以帮助分类，而且正好200是我们最想看的放在最前面
                     results.append("[200] "+url)
-                elif response.status_code!=200:
-                    # 如果url == response.url，就只写url，简化写入结果方便阅读
-                    if url!=response.url:
-                        print("\033[36m[%d] %s\033[0m  ->  %s" % (response.status_code, url, response.url))
-                        results.append("[%d] %s  ->  %s" % (response.status_code, url, response.url))
-                    else:
-                        print("\033[36m[%d] %s\033[0m" % (response.status_code, url))
-                        results.append("[%d] %s" % (response.status_code, url))
+                # 返回30x，以青色输出跳转前后url
+                elif response.status_code > 300 and response.status_code < 400:
+                    print("\033[36m[%d] %s\033[0m -> %s" % (response.status_code, url, response.url))
+                # 返回40x，以蓝色输出
+                elif response.status_code > 400 and response.status_code < 404:
+                    print("\033[34m[%d] %s\033[0m" % (response.status_code, url))
+                # 返回40x，以蓝色输出
+                elif response.status_code > 500 and response.status_code < 600:
+                    print("\033[35m[%d] %s\033[0m" % (response.status_code, url))
             else:
                 print("[404] %s" % url)
         except requests.exceptions.ConnectTimeout:
             print("[Timeout] " + url)
         except requests.exceptions.ConnectionError:
-            print("[Error] "  + url)
+            print("[Connect Error] "  + url)
         # 重定向次数过多，忽略该错误，直接进入下一次循环
         except requests.exceptions.TooManyRedirects:
             continue
         except Exception as e:
-            print("... <==> "+url)
+            print("\033[31m%s => %s\033[0m" % (e, url))
 
 '''
 先将所有url读出来放入列表，为每个url添加线程
@@ -105,7 +110,7 @@ def output(file, results):
     print("\033[35m[INFO] 扫描完成，写入结果中...\033[0m")
     # 以返回状态码排序，将最有可能的200放在最前，非常nice
     results.sort()
-    f_w = open(file, 'w')
+    f_w = open(file, 'w', encoding='utf-8')
     for i in results:
         f_w.write(i+"\n")
     f_w.close()
@@ -116,26 +121,24 @@ def title(host):
     if host[:4] != "http":
         host = "http://"+host
     url = host
-    # 定义header头
-    header = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
-    'Accept-Language': 'zh-CN,zh;q=0.9',
-    'Content-Type': 'application/x-www-form-urlencoded'
-    }
     # 处理扫描请求和结果
     try:
-        req = requests.get(url, headers=header)
-        re_title = re.findall('<title>(.*?)</title>',req.text)
-        if re_title!=None:
-            if req.encoding == "ISO-8859-1":
-                title = re_title[0].encode('ISO-8859-1').decode('gbk')
-            else:
-                title = re_title[0]
+        req = requests.get(url, headers=header, timeout=5)
+        soup = BeautifulSoup(req.text, 'lxml')
+        title = "None"
+        if "title" in soup.prettify():
+            title = soup.title.string
             print("\033[32m[%s] %s\033[0m" % (title, url))
-            # 只保存有title的domain，并且不保存标题
-            results.append(url)
-    except:
-        print("[Connect Error] %s" % url)
+        else:
+            print("\033[32m[None] %s\033[0m" % url)
+        results.append(title+" "+url)
+
+    except requests.exceptions.ConnectTimeout:
+        print("[Timeout] " + url)
+    except requests.exceptions.ConnectionError:
+        print("[Connect Error] " + url)
+    except Exception as e:
+        print("\033[31m%s => %s\033[0m" % (e, url))
 
 if __name__ == '__main__':
     usage = r'''
