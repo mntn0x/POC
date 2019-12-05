@@ -1,0 +1,81 @@
+403 Forbidden http://shopstatic-in.vivo.com
+404 Not Found http://in-accountstatic.vivo.com
+502 Bad Gateway http://carrier.vivo.com
+502 Bad Gateway http://shgj.vivo.com
+Apache Tomcat/7.0.72 - Error report http://pay.vivo.com
+EasyShare http://easyshare.vivo.com
+Error http://de-ali-cname-www.vivo.com
+Error http://in-ali-browserproxy-cname.vivo.com
+Error http://in-ali-nginxpool01-cname.vivo.com
+Error http://in-ali-nginxpool10-cname.vivo.com
+Error http://ru-ali-cname-www.vivo.com
+HTTP Status 404 – Not Found http://domaincfg.vivo.com
+HTTP Status 404 – Not Found http://news-abroad.vivo.com
+Homepage | Vivo Global http://asia-exstatic.vivo.com
+Mobile carriers query http://excarrier.vivo.com
+My JSP 'index.jsp' starting page http://asia-expstatisweb.vivo.com
+My JSP 'index.jsp' starting page http://asia-expweb.vivo.com
+My JSP 'index.jsp' starting page http://expstatisweb.vivo.com
+My JSP 'index.jsp' starting page http://expweb.vivo.com
+My JSP 'index.jsp' starting page http://kz-expweb.vivo.com
+My JSP 'index.jsp' starting page http://ru-expstatisweb.vivo.com
+My JSP 'index.jsp' starting page http://ru-expweb.vivo.com
+None http://asia-exstatic-vivofs.vivo.com
+None http://asia-st-expc.vivo.com
+None http://exstatic-in.vivo.com
+None http://in-exstatic-vivofs.vivo.com
+None http://in-exstpc.vivo.com
+None http://in-st-expc.vivo.com
+None http://iqoo.vivo.com
+None http://ru-exfaq.vivo.com
+None http://ru-exstatic-vivofs.vivo.com
+None http://ru-st-expc.vivo.com
+None http://sg-exstpay.vivo.com
+Vivo Official E-Store http://mshopstatic-in.vivo.com
+Welcome to nginx! http://api.issue.dev.vivo.com
+vivo AI Lab-vivo人工智能实验室官网 http://ai.vivo.com
+vivo Developers http://developer.vivo.com
+vivo Developers http://issue.dev.vivo.com
+vivo NEX AI智慧旗舰，非凡一升 突破未来_vivo官网社区 http://bbs.vivo.com
+vivo framework hello world http://browserproxy.vivo.com
+vivo framework hello world http://video.vivo.com
+vivo | Официальный интернет-магазин http://ru.vivo.com
+vivo 安全应急响应平台 http://security.vivo.com
+vivo云服务 http://cloud.vivo.com
+vivo云服务 http://findphone.vivo.com
+vivo开放平台 http://dev.vivo.com
+vivo手机助手官方网站 http://zs.vivo.com
+vivo智能手机官方商城-5G智慧旗舰NEX 3 http://mshop.vivo.com
+vivo智能手机官方商城-5G智慧旗舰NEX 3 http://shop.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://0ndphone.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://atv.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://bnz.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://cheese.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://developer-static.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://ex-devmng-static.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://ftp.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://global.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://iqoodamai.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://iwww.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://lojaonline.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://macjs.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://payin.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://pch.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://pinball.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://rbcloud.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://rose.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://slb-exvivoportal-web.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://trial.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://tv.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://www.vivo.com
+vivo智能手机官方网站-5G智慧旗舰NEX 3 http://www.vivo.com
+ç½æä¼ä¸é®ç®± - ä¼ä¸é®ç®±ä¿¡æ¯åä¸ä¸è§£å³æ¹æ¡ http://smtp.vivo.com
+Этот домен припаркован компанией Timeweb http://www.ru.vivo.com
+云招聘系统9.0
+     http://zhaopin.vivo.com
+互传官网
+ - 互传零流量快捷传输 http://es.vivo.com
+互传网页版 http://as.vivo.com
+互传网页版 http://ss.vivo.com
+首页 http://hr.vivo.com

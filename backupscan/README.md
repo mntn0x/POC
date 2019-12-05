@@ -30,7 +30,6 @@ Options:
                         url list file
   -t THREAD             thread number
   -o OUTFILE            output file
-  --timeout=TIMEOUT     timeout count
   --title               Get domain's title
 ```
 
@@ -46,6 +45,6 @@ Options:
 
 ##  待完成
 
-- [ ] 还有一个报错为解决，但是不影响正常使用，回在扫描时导致部分url扫描不到【FXXK，大批量扫描的时候这个错误出现此处太高了，急需修补错误！】
+- [x] 还有一个报错为解决，但是不影响正常使用，回在扫描时导致部分url扫描不到【FXXK，大批量扫描的时候这个错误出现此处太高了，急需修补错误！】
 
 - [ ] 指定从文件读取扫描字典
